@@ -8,10 +8,11 @@ docker run -d --name pg-image-metadata -e POSTGRES_USER=dbuser -e POSTGRES_PASSW
 
 ## Build and run commands
 ```bash
-maven clean package
+mvn clean package
 cd api/target
 java -jar image-catalog-api-1.0.0-SNAPSHOT.jar
 ```
+Available at: localhost:8080/v1/images
 
 ## Docker commands
 ```bash
