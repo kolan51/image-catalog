@@ -21,6 +21,15 @@ kumuluzee:
       web-instrumentation:
         - name: images-endpoint
           url-pattern: /v1/images/*
+  rest-client:
+    registrations:
+      - class: image-processing-api
+        url: http://localhost:8082/v1
+        read-timeout: 5000
 rest-properties:
   maintenance-mode: false
   broken: false
+app-properties:
+  amazon-rekognition:
+    access-key:
+    secret-key:

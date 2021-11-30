@@ -1,6 +1,6 @@
 package si.fri.rso.samples.imagecatalog.api.v1.resources;
 
-import si.fri.rso.samples.imagecatalog.services.config.RestProperties;
+import si.fri.rso.samples.imagecatalog.config.RestProperties;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

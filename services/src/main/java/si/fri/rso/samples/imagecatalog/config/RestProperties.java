@@ -1,4 +1,4 @@
-package si.fri.rso.samples.imagecatalog.services.config;
+package si.fri.rso.samples.imagecatalog.config;
 
 import com.kumuluz.ee.configuration.cdi.ConfigBundle;
 import com.kumuluz.ee.configuration.cdi.ConfigValue;
