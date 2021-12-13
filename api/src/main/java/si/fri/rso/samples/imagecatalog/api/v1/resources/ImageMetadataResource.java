@@ -2,6 +2,7 @@ package si.fri.rso.samples.imagecatalog.api.v1.resources;
 
 import com.kumuluz.ee.cors.annotations.CrossOrigin;
 import com.kumuluz.ee.logs.cdi.Log;
+import com.kumuluz.ee.discovery.annotations.DiscoverService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.headers.Header;
@@ -11,14 +12,15 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import si.fri.rso.samples.imagecatalog.api.v1.dtos.UploadImageResponse;
 import si.fri.rso.samples.imagecatalog.dtos.ImageProcessRequest;
 import si.fri.rso.samples.imagecatalog.lib.ImageMetadata;
 import si.fri.rso.samples.imagecatalog.services.beans.ImageMetadataBean;
 import si.fri.rso.samples.imagecatalog.services.clients.AmazonRekognitionClient;
-import si.fri.rso.samples.imagecatalog.services.clients.ImageProcessingApi;
+import si.fri.rso.samples.imagecatalog.services.clients.ImageProcessingApi;;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -28,6 +30,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletionStage;
@@ -53,9 +56,20 @@ public class ImageMetadataResource {
     @Inject
     private AmazonRekognitionClient amazonRekognitionClient;
 
-    @Inject
-    @RestClient
+    //@Inject
+    //@RestClient
     private ImageProcessingApi imageProcessingApi;
+
+    @DiscoverService("image-processing-service")
+    private URI imageProcessingServiceUrl;
+
+    @PostConstruct
+    private void init() {
+        imageProcessingApi = RestClientBuilder
+                .newBuilder()
+                .baseUri(imageProcessingServiceUrl)
+                .build(ImageProcessingApi.class);
+    }
 
     @Operation(description = "Get all image metadata.", summary = "Get all metadata")
     @APIResponses({
@@ -213,7 +227,7 @@ public class ImageMetadataResource {
         // Upload image to storage
 
         // Generate event for image processing
-//        eventProducer.produceMessage(imageId, imageLocation);
+        //eventProducer.produceMessage(imageId, imageLocation);
 
         // start image processing over async API
         CompletionStage<String> stringCompletionStage =
